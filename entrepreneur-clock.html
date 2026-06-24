@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrepreneur Clock</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #191919;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: 560px;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  /* ── CLOCK ── */
+  .clock-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 0.5px solid #2e2e2e;
+    padding-bottom: 28px;
+  }
+
+  .greeting {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #4a4a4a;
+  }
+
+  .time {
+    font-family: 'DM Mono', monospace;
+    font-size: 64px;
+    font-weight: 300;
+    color: #e8e8e8;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .time .colon {
+    color: #3a3a3a;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { color: #3a3a3a; }
+    50% { color: #e8e8e8; }
+  }
+
+  .ampm {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 300;
+    color: #3d3d3d;
+    letter-spacing: 0.12em;
+    margin-top: 2px;
+  }
+
+  .date-line {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    color: #4a4a4a;
+    letter-spacing: 0.06em;
+    margin-top: 4px;
+  }
+
+  /* accent bar under time */
+  .accent-bar {
+    width: 32px;
+    height: 1px;
+    background: #2a2a2a;
+    margin-top: 10px;
+  }
+
+  /* ── CALENDAR ── */
+  .cal-block {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cal-month {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #5a5a5a;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .cal-nav {
+    display: flex;
+    gap: 12px;
+  }
+
+  .cal-btn {
+    background: none;
+    border: none;
+    color: #3a3a3a;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 2px 6px;
+    line-height: 1;
+    transition: color 0.15s;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .cal-btn:hover { color: #888; }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+
+  .cal-day-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    color: #333;
+    text-align: center;
+    padding: 4px 0;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .cal-day {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 300;
+    color: #3d3d3d;
+    text-align: center;
+    padding: 7px 2px;
+    border-radius: 4px;
+    cursor: default;
+    transition: background 0.1s, color 0.1s;
+    line-height: 1;
+  }
+
+  .cal-day:hover:not(.empty):not(.today) {
+    background: #222;
+    color: #888;
+  }
+
+  .cal-day.today {
+    background: #232323;
+    color: #e8e8e8;
+    font-weight: 500;
+    position: relative;
+  }
+
+  .cal-day.today::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #5a5a5a;
+  }
+
+  .cal-day.empty { color: transparent; cursor: default; }
+
+  .cal-day.other-month { color: #272727; }
+
+  /* ── QUOTE ── */
+  .quote-block {
+    border-top: 0.5px solid #222;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .quote-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    color: #383838;
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .quote-author {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: #2e2e2e;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="clock-block">
+    <div class="greeting" id="greeting">Good morning</div>
+    <div class="time" id="clock">
+      <span id="h">00</span><span class="colon">:</span><span id="m">00</span><span class="colon">:</span><span id="s">00</span>
+    </div>
+    <div class="ampm" id="ampm">AM</div>
+    <div class="date-line" id="dateline">Monday, June 23, 2026</div>
+    <div class="accent-bar"></div>
+  </div>
+
+  <div class="cal-block">
+    <div class="cal-header">
+      <div class="cal-month" id="cal-month-label">June 2026</div>
+      <div class="cal-nav">
+        <button class="cal-btn" onclick="changeMonth(-1)">&#8592;</button>
+        <button class="cal-btn" onclick="changeMonth(1)">&#8594;</button>
+      </div>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
+
+  <div class="quote-block">
+    <div class="quote-text" id="quote-text">"Build the business you wish existed."</div>
+    <div class="quote-author" id="quote-author">— Unknown</div>
+  </div>
+
+</div>
+
+<script>
+  const quotes = [
+    { text: "Build the business you wish existed.", author: "Unknown" },
+    { text: "Work like there is someone trying to take it all away from you.", author: "Mark Cuban" },
+    { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+    { text: "Done is better than perfect.", author: "Sheryl Sandberg" },
+    { text: "Your time is limited. Don't waste it living someone else's life.", author: "Steve Jobs" },
+    { text: "Move fast. Think slow.", author: "Naval Ravikant" },
+    { text: "Earn with your mind, not your time.", author: "Naval Ravikant" },
+    { text: "The market rewards value, not effort.", author: "Unknown" },
+    { text: "You don't rise to the level of your goals. You fall to the level of your systems.", author: "James Clear" },
+    { text: "Revenue is vanity. Profit is sanity. Cash is reality.", author: "Unknown" },
+    { text: "An entrepreneur is someone who jumps off a cliff and builds a plane on the way down.", author: "Reid Hoffman" },
+    { text: "Focus on being productive instead of busy.", author: "Tim Ferriss" },
+  ];
+
+  function setQuote() {
+    const today = new Date();
+    const idx = today.getDate() % quotes.length;
+    document.getElementById('quote-text').textContent = `"${quotes[idx].text}"`;
+    document.getElementById('quote-author').textContent = `— ${quotes[idx].author}`;
+  }
+
+  function updateClock() {
+    const now = new Date();
+    let h = now.getHours();
+    const m = now.getMinutes();
+    const s = now.getSeconds();
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+
+    document.getElementById('h').textContent = String(h).padStart(2, '0');
+    document.getElementById('m').textContent = String(m).padStart(2, '0');
+    document.getElementById('s').textContent = String(s).padStart(2, '0');
+    document.getElementById('ampm').textContent = ampm;
+
+    const hour = now.getHours();
+    let greet = 'Good evening';
+    if (hour < 12) greet = 'Good morning';
+    else if (hour < 17) greet = 'Good afternoon';
+    document.getElementById('greeting').textContent = greet;
+
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    document.getElementById('dateline').textContent =
+      `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+  }
+
+  let calYear, calMonth;
+  function initCal() {
+    const now = new Date();
+    calYear = now.getFullYear();
+    calMonth = now.getMonth();
+    renderCal();
+  }
+
+  function changeMonth(dir) {
+    calMonth += dir;
+    if (calMonth > 11) { calMonth = 0; calYear++; }
+    if (calMonth < 0) { calMonth = 11; calYear--; }
+    renderCal();
+  }
+
+  function renderCal() {
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    document.getElementById('cal-month-label').textContent = `${months[calMonth]} ${calYear}`;
+
+    const grid = document.getElementById('cal-grid');
+    grid.innerHTML = '';
+
+    const dayNames = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+    dayNames.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'cal-day-name';
+      el.textContent = d;
+      grid.appendChild(el);
+    });
+
+    const firstDay = new Date(calYear, calMonth, 1).getDay();
+    const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+    const today = new Date();
+
+    for (let i = 0; i < firstDay; i++) {
+      const el = document.createElement('div');
+      el.className = 'cal-day empty';
+      el.textContent = '0';
+      grid.appendChild(el);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const el = document.createElement('div');
+      el.className = 'cal-day';
+      el.textContent = d;
+      if (
+        d === today.getDate() &&
+        calMonth === today.getMonth() &&
+        calYear === today.getFullYear()
+      ) el.classList.add('today');
+      grid.appendChild(el);
+    }
+  }
+
+  updateClock();
+  setInterval(updateClock, 1000);
+  initCal();
+  setQuote();
+</script>
+</body>
+</html>
